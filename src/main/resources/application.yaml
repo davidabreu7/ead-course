@@ -1,0 +1,9 @@
+#microservice
+server:
+  port: 8088
+
+#mongodb
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
