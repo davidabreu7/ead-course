@@ -7,6 +7,7 @@ import com.ead.course.repositories.CourseRepository;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,11 +26,15 @@ public class CourseService {
         this.lessonRepository = lessonRepository;
     }
 
+    @Transactional
     public void deleteCourse(CourseModel course) {
         List<ModuleModel> modules = moduleRepository.findAllModulesIntoCourse(course);
         modules.forEach(module -> {
             List<LessonModel> lessonList = lessonRepository.findAllLessonsIntoModule(module);
             lessonRepository.deleteAll(lessonList);
         });
+        moduleRepository.deleteAll(modules);
+        courseRepository.delete(course);
     }
+
 }
