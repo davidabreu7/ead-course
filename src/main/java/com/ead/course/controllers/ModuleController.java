@@ -40,7 +40,7 @@ public class ModuleController {
         return ResponseEntity.ok(moduleService.updateModule(courseId, moduleId, moduleDto));
     }
 
-    @GetMapping("/courses/{courseId}/modules/")
+    @GetMapping("/courses/{courseId}/modules")
     public ResponseEntity<List<ModuleModel>> getAllModules(@PathVariable String courseId) {
         return ResponseEntity.ok(moduleService.getAllModules(courseId));
     }

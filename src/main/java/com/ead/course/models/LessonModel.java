@@ -28,7 +28,7 @@ public class LessonModel {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime createdAt;
 
-    @DocumentReference(lazy = true)
+    @DocumentReference
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ModuleModel module;
 }

@@ -73,6 +73,7 @@ public class ModuleService {
     public ModuleModel getModuleById(String courseId, String moduleId) {
         ModuleModel module = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Module not found"));
+
         if (module.getCourse().getId().equals(courseId)) {
             return module;
         } else {

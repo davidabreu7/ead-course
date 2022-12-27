@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CustomModuleRepository {
 
-    public List<ModuleModel> findAllModulesIntoCourse(CourseModel course);
+    List<ModuleModel> findAllModulesIntoCourse(CourseModel course);
 }
