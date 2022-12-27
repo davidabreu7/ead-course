@@ -1,10 +1,12 @@
 package com.ead.course.models;
 
+import com.ead.course.dto.LessonDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @Document(collection = "lessons")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class LessonModel {
 
     @Id
@@ -31,4 +34,11 @@ public class LessonModel {
     @DocumentReference
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private ModuleModel module;
+
+    public LessonModel(LessonDto lessonDto) {
+        this.title = lessonDto.getTitle();
+        this.description = lessonDto.getDescription();
+        this.videoUrl = lessonDto.getVideoUrl();
+        this.createdAt = LocalDateTime.now();
+    }
 }

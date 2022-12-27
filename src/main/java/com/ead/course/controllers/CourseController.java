@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/courses")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class CourseController {
 
     private final CourseService courseService;
