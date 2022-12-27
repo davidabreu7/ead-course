@@ -1,10 +1,12 @@
 package com.ead.course.models;
 
+import com.ead.course.dto.ModuleDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +18,7 @@ import java.util.Set;
 @Data
 @Document(collection = "modules")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
 public class ModuleModel {
 
     @Id
@@ -36,4 +39,10 @@ public class ModuleModel {
     @DocumentReference(lookup = "{ 'module': ?#{#self._id} }")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<LessonModel> lessons;
+
+    public ModuleModel(ModuleDto moduleDtoDto) {
+        this.title = moduleDtoDto.getTitle();
+        this.description = moduleDtoDto.getDescription();
+        this.createdAt = LocalDateTime.now();
+    }
 }

@@ -1,9 +1,10 @@
 #microservice
 server:
   port: 8088
+  servlet:
+    context-path: /api/v1
 
 #mongodb
 spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
-
