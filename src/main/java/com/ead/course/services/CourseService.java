@@ -8,6 +8,8 @@ import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.CourseRepository;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,10 @@ public class CourseService {
 
     private final LessonRepository lessonRepository;
 
+    private static final String COURSE_NOT_FOUND = "Course not found";
+
+
+
     public CourseService(CourseRepository courseRepository, ModuleRepository moduleRepository, LessonRepository lessonRepository) {
         this.courseRepository = courseRepository;
         this.moduleRepository = moduleRepository;
@@ -33,7 +39,7 @@ public class CourseService {
     @Transactional
     public void deleteCourse(String id) {
         CourseModel course = courseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE_NOT_FOUND));
 
         List<ModuleModel> modules = moduleRepository.findAllModulesIntoCourse(course);
         modules.forEach(module -> {
@@ -55,7 +61,7 @@ public class CourseService {
 
     public CourseModel updateCourse(String id, CourseDto courseDto) {
         CourseModel course = courseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE_NOT_FOUND));
 
         course.setName(courseDto.getName());
         course.setDescription(courseDto.getDescription());
@@ -68,12 +74,12 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public List<CourseModel> getAllCourses() {
-        return courseRepository.findAll();
+    public Page<CourseModel> getAllCourses(Pageable pageable) {
+        return courseRepository.findAll(pageable);
     }
 
     public CourseModel getCourseById(String id) {
         return courseRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(COURSE_NOT_FOUND));
     }
 }

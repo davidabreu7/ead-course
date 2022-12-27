@@ -4,11 +4,11 @@ import com.ead.course.dto.ModuleDto;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.services.ModuleService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -41,8 +41,8 @@ public class ModuleController {
     }
 
     @GetMapping("/courses/{courseId}/modules")
-    public ResponseEntity<List<ModuleModel>> getAllModules(@PathVariable String courseId) {
-        return ResponseEntity.ok(moduleService.getAllModules(courseId));
+    public ResponseEntity<Page<ModuleModel>> getAllModules(@PathVariable String courseId, Pageable pageable) {
+        return ResponseEntity.ok(moduleService.getAllModules(courseId, pageable));
     }
 
     @GetMapping("/courses/{courseId}/modules/{moduleId}")

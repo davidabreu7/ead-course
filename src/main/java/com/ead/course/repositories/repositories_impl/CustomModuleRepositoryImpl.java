@@ -4,9 +4,12 @@ import com.ead.course.models.CourseModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.CustomModuleRepository;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
@@ -23,5 +26,19 @@ public class CustomModuleRepositoryImpl implements CustomModuleRepository {
         query.addCriteria(Criteria.where("course").is(new ObjectId(course.getId())));
         return mongoTemplate.find(query, ModuleModel.class);
     }
+
+    @Override
+    public Page<ModuleModel> findAllModulesIntoCourse(CourseModel course, Pageable pageable) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("course").is(new ObjectId(course.getId())));
+        query.with(pageable);
+        List<ModuleModel> moduleModels = mongoTemplate.find(query, ModuleModel.class);
+        return PageableExecutionUtils.getPage(
+                moduleModels,
+                pageable,
+                () -> mongoTemplate.count(query, ModuleModel.class));
+    }
+
+
 }
 

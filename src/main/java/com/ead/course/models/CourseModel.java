@@ -46,7 +46,7 @@ public class CourseModel {
     private UUID userInstuctor;
 
     @ReadOnlyProperty
-    @DocumentReference(lookup = "{ 'course': ?#{#self._id} }")
+    @DocumentReference(lookup = "{ 'course': ?#{#self._id} }", lazy = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<ModuleModel> modules;
 

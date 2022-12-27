@@ -37,7 +37,7 @@ public class ModuleModel {
     private CourseModel course;
 
     @ReadOnlyProperty
-    @DocumentReference(lookup = "{ 'module': ?#{#self._id} }")
+    @DocumentReference(lookup = "{ 'module': ?#{#self._id} }", lazy = true)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<LessonModel> lessons;
 

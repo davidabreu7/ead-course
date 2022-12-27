@@ -6,9 +6,9 @@ import com.ead.course.models.LessonModel;
 import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 public class LessonService {
@@ -65,9 +65,10 @@ public class LessonService {
         }
     }
 
-    public Set<LessonModel> getLessons(String moduleId) {
+    public Page<LessonModel> getLessons(String moduleId, Pageable pageable) {
         ModuleModel module = moduleRepository.findById(moduleId)
-                .orElseThrow(() -> new ResourceNotFoundException(LESSON_NOT_FOUND));
-        return module.getLessons();
+                .orElseThrow(() -> new ResourceNotFoundException("Module not found"));
+
+        return lessonRepository.findAllLessonsIntoModule(module, pageable);
     }
 }
