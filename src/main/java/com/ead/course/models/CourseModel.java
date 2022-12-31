@@ -5,7 +5,6 @@ import com.ead.course.enums.CourseLevel;
 import com.ead.course.enums.CourseStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -47,7 +46,6 @@ public class CourseModel {
 
     @ReadOnlyProperty
     @DocumentReference(lookup = "{ 'course': ?#{#self._id} }", lazy = true)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<ModuleModel> modules;
 
     public CourseModel(CourseDto courseDto) {
