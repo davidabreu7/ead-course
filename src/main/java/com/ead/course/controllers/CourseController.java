@@ -39,7 +39,7 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CourseModel>> getAllCourses(Pageable pageable) {
+    public ResponseEntity<Page<CourseModel>> getAllCourses(@RequestParam(required = false) String studentId,  Pageable pageable) {
         return ResponseEntity.ok(courseService.getAllCourses(pageable));
     }
 

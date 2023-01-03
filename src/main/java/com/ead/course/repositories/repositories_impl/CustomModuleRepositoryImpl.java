@@ -5,11 +5,11 @@ import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.CustomModuleRepository;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 
@@ -29,14 +29,8 @@ public class CustomModuleRepositoryImpl implements CustomModuleRepository {
 
     @Override
     public Page<ModuleModel> findAllModulesIntoCourse(CourseModel course, Pageable pageable) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("course").is(new ObjectId(course.getId())));
-        query.with(pageable);
-        List<ModuleModel> moduleModels = mongoTemplate.find(query, ModuleModel.class);
-        return PageableExecutionUtils.getPage(
-                moduleModels,
-                pageable,
-                () -> mongoTemplate.count(query, ModuleModel.class));
+        List<ModuleModel> moduleModels = course.getModules();
+        return new PageImpl<>(moduleModels, pageable, moduleModels.size());
     }
 
 

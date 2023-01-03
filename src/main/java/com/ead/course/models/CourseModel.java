@@ -4,6 +4,7 @@ import com.ead.course.dto.CourseDto;
 import com.ead.course.enums.CourseLevel;
 import com.ead.course.enums.CourseStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -46,7 +47,8 @@ public class CourseModel {
 
     @ReadOnlyProperty
     @DocumentReference(lookup = "{ 'course': ?#{#self._id} }", lazy = true)
-    private Set<ModuleModel> modules;
+    @JsonIgnore
+    private List<ModuleModel> modules;
 
     public CourseModel(CourseDto courseDto) {
         this.name = courseDto.getName();
