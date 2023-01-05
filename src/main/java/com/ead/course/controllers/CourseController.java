@@ -42,7 +42,6 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<Page<CourseModel>> getAllCourses(@QuerydslPredicate(root = CourseModel.class) Predicate predicate,
-                                                           @RequestParam(required = false) String users,
                                                            Pageable pageable) {
         return ResponseEntity.ok(courseService.getAllCourses(predicate, pageable));
     }
@@ -51,4 +50,5 @@ public class CourseController {
     public ResponseEntity<CourseModel> getCourseById(@PathVariable String id) {
         return ResponseEntity.ok(courseService.getCourseById(id));
     }
+
 }
