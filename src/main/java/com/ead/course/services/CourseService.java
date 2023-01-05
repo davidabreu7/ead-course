@@ -8,6 +8,7 @@ import com.ead.course.models.ModuleModel;
 import com.ead.course.repositories.CourseRepository;
 import com.ead.course.repositories.LessonRepository;
 import com.ead.course.repositories.ModuleRepository;
+import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -74,8 +75,8 @@ public class CourseService {
         return courseRepository.save(course);
     }
 
-    public Page<CourseModel> getAllCourses(Pageable pageable) {
-        return courseRepository.findAll(pageable);
+    public Page<CourseModel> getAllCourses(Predicate predicate, Pageable pageable) {
+        return courseRepository.findAll(predicate, pageable);
     }
 
     public CourseModel getCourseById(String id) {

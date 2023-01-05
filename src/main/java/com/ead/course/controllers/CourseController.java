@@ -3,9 +3,11 @@ package com.ead.course.controllers;
 import com.ead.course.dto.CourseDto;
 import com.ead.course.models.CourseModel;
 import com.ead.course.services.CourseService;
+import com.querydsl.core.types.Predicate;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +41,10 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CourseModel>> getAllCourses(@RequestParam(required = false) String studentId,  Pageable pageable) {
-        return ResponseEntity.ok(courseService.getAllCourses(pageable));
+    public ResponseEntity<Page<CourseModel>> getAllCourses(@QuerydslPredicate(root = CourseModel.class) Predicate predicate,
+                                                           @RequestParam(required = false) String users,
+                                                           Pageable pageable) {
+        return ResponseEntity.ok(courseService.getAllCourses(predicate, pageable));
     }
 
     @GetMapping("/{id}")

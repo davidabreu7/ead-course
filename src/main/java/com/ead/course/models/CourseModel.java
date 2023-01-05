@@ -46,9 +46,12 @@ public class CourseModel {
     private UUID userInstuctor;
 
     @ReadOnlyProperty
-    @DocumentReference(lookup = "{ 'course': ?#{#self._id} }", lazy = true)
+    @DocumentReference(collection = "modules", lookup = "{ 'course': ?#{#self._id} }", lazy = true)
     @JsonIgnore
     private List<ModuleModel> modules;
+
+    @JsonIgnore
+    private List<String> users;
 
     public CourseModel(CourseDto courseDto) {
         this.name = courseDto.getName();
