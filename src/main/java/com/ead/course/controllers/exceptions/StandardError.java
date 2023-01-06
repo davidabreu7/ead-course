@@ -6,7 +6,6 @@ public class StandardError {
 
     private Instant timestamp;
     private Integer status;
-    private String error;
     private String message;
     private String path;
 
@@ -27,13 +26,6 @@ public class StandardError {
         this.status = status;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
 
     public String getMessage() {
         return message;

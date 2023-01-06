@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,10 +49,10 @@ public class CourseModel {
     @ReadOnlyProperty
     @DocumentReference(collection = "modules", lookup = "{ 'course': ?#{#self._id} }", lazy = true)
     @JsonIgnore
-    private List<ModuleModel> modules;
+    private List<ModuleModel> modules = new ArrayList<>();
 
     @JsonIgnore
-    private List<String> users;
+    private List<String> users = new ArrayList<>();
 
     public CourseModel(CourseDto courseDto) {
         this.name = courseDto.getName();

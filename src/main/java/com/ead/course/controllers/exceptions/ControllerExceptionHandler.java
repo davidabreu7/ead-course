@@ -3,6 +3,7 @@ package com.ead.course.controllers.exceptions;
 import com.ead.course.exceptions.DatabaseIntegrityException;
 import com.ead.course.exceptions.FieldException;
 import com.ead.course.exceptions.ResourceNotFoundException;
+import com.ead.course.exceptions.SubscriptionException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -11,13 +12,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
-    private static final  String ERROR = "Validation error";
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) {
@@ -49,13 +51,20 @@ public class ControllerExceptionHandler {
         return getMongoKeyValidationErrorResponseEntity(e, request);
     }
 
+    @ExceptionHandler(SubscriptionException.class)
+    public ResponseEntity<StandardError> database(SubscriptionException e, HttpServletRequest request) {
+        return getStandardErrorResponseEntity(e, request, HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(WebClientResponseException.class)
+    public ResponseEntity<StandardError> webClientResponseException(WebClientResponseException e, HttpServletRequest request) {
+        return getStandardErrorResponseEntity(e, request, Objects.requireNonNull(HttpStatus.resolve(e.getStatusCode().value())));
+    }
 
     private ResponseEntity<StandardError> getStandardErrorResponseEntity(RuntimeException e, HttpServletRequest request, HttpStatus status) {
         StandardError error = new StandardError();
         error.setTimestamp(Instant.now());
         error.setStatus(status.value());
         error.setMessage(e.getMessage());
-        error.setError(ERROR);
         error.setPath(request.getRequestURI());
         return ResponseEntity.status(status).body(error);
     }
@@ -68,7 +77,6 @@ public class ControllerExceptionHandler {
         err.setTimestamp(Instant.now());
         err.setStatus(status.value());
         err.setMessage(e.getMessage());
-        err.setError(ERROR);
         err.setPath(request.getRequestURI());
         e.getBindingResult().getFieldErrors()
                 .stream()
@@ -85,7 +93,6 @@ public class ControllerExceptionHandler {
         err.setTimestamp(Instant.now());
         err.setStatus(status.value());
         err.setMessage(e.getMessage());
-        err.setError(ERROR);
         err.setPath(request.getRequestURI());
 
         e.getConstraintViolations()
@@ -104,7 +111,6 @@ public class ControllerExceptionHandler {
         err.setTimestamp(Instant.now());
         err.setStatus(status.value());
         err.setMessage(e.getCause().getMessage());
-        err.setError(ERROR);
         err.setPath(request.getRequestURI());
 
         return ResponseEntity.status(status).body(err);

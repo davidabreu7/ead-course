@@ -1,9 +1,9 @@
 package com.ead.course.dto;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public record UserRecord(String id, String username, String email, String fullname,
-                         String phoneNumber, String cpf, ZonedDateTime createdAt, ZonedDateTime updatedAt,
+                         String phoneNumber, String cpf, LocalDateTime createdAt, LocalDateTime updatedAt,
                          String userStatus, String userType) {
 }
 
