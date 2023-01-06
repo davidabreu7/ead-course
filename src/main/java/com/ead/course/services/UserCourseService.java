@@ -9,6 +9,7 @@ import com.ead.course.exceptions.SubscriptionException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.repositories.CourseRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserCourseService {
@@ -37,6 +38,7 @@ public class UserCourseService {
                 .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
     }
 
+    @Transactional
     public SubscriptionDto subscribeUserInCourse(String courseId, SubscriptionDto subscriptionDto) {
         CourseModel course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course not found"));
