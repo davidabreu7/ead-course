@@ -1,13 +1,13 @@
 package com.ead.course.services;
 
 import com.ead.course.clients.UserCourseClient;
-import com.ead.course.dto.ResponsePageDto;
 import com.ead.course.dto.SubscriptionDto;
 import com.ead.course.dto.UserRecord;
 import com.ead.course.exceptions.ResourceNotFoundException;
 import com.ead.course.exceptions.SubscriptionException;
 import com.ead.course.models.CourseModel;
 import com.ead.course.repositories.CourseRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,7 @@ public class UserCourseService {
         this.courseRepository = courseRepository;
     }
 
-    public ResponsePageDto<UserRecord> getAllCoursesByStudent(String id) {
+    public Page<UserRecord> getAllCoursesByStudent(String id) {
         return userCourseClient.getAllCoursesByStudent(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
     }
 

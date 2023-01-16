@@ -1,10 +1,26 @@
 #microservice
 server:
   port: 8090
-  servlet:
-    context-path: /api/v1
+#  servlet:
+#    context-path: /api/v1
 
 #mongodb
 spring:
+  application:
+        name: course
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
+  cloud:
+    openfeign:
+      autoconfiguration:
+        jackson:
+          enabled: true
+
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: 'http://localhost:8761/eureka/'
+
+

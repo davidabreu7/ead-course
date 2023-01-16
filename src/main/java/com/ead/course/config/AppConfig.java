@@ -1,22 +1,14 @@
 package com.ead.course.config;
 
-import com.ead.course.clients.UserCourseClient;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.support.WebClientAdapter;
-import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class AppConfig {
 
     // ...
-
-    @Value("${client.url}")
-    private String url;
 
     @Bean
     public ValidatingMongoEventListener validatingMongoEventListener(
@@ -24,15 +16,18 @@ public class AppConfig {
         return new ValidatingMongoEventListener(factory);
     }
 
-    @Bean
-    UserCourseClient userCourseClient(){
-        WebClient client = WebClient.builder()
-                .baseUrl(url)
-                .build();
 
-        HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client))
-                .build();
-
-        return proxyFactory.createClient(UserCourseClient.class);
-    }
+//    @Bean
+//    @LoadBalanced
+//    UserCourseClient userCourseClient(){
+//        WebClient client = WebClient.builder()
+////                .clientConnector(new ReactorClientHttpConnector(httpClientReactor()))
+//                .baseUrl(url)
+//                .build();
+//
+//        HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory.builder(WebClientAdapter.forClient(client))
+//                .build();
+//
+//        return proxyFactory.createClient(UserCourseClient.class);
+//    }
 }

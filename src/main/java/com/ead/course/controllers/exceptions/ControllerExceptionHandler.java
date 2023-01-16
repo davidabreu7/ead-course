@@ -12,10 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.time.Instant;
-import java.util.Objects;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -55,10 +53,10 @@ public class ControllerExceptionHandler {
     public ResponseEntity<StandardError> database(SubscriptionException e, HttpServletRequest request) {
         return getStandardErrorResponseEntity(e, request, HttpStatus.CONFLICT);
     }
-    @ExceptionHandler(WebClientResponseException.class)
-    public ResponseEntity<StandardError> webClientResponseException(WebClientResponseException e, HttpServletRequest request) {
-        return getStandardErrorResponseEntity(e, request, Objects.requireNonNull(HttpStatus.resolve(e.getStatusCode().value())));
-    }
+//    @ExceptionHandler(WebClientResponseException.class)
+//    public ResponseEntity<StandardError> webClientResponseException(WebClientResponseException e, HttpServletRequest request) {
+//        return getStandardErrorResponseEntity(e, request, Objects.requireNonNull(HttpStatus.resolve(e.getStatusCode().value())));
+//    }
 
     private ResponseEntity<StandardError> getStandardErrorResponseEntity(RuntimeException e, HttpServletRequest request, HttpStatus status) {
         StandardError error = new StandardError();
