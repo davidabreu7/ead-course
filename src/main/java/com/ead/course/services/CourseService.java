@@ -27,14 +27,17 @@ public class CourseService {
 
     private final LessonRepository lessonRepository;
 
+    private final UserCourseService userCourseService;
+
     private static final String COURSE_NOT_FOUND = "Course not found";
 
 
 
-    public CourseService(CourseRepository courseRepository, ModuleRepository moduleRepository, LessonRepository lessonRepository) {
+    public CourseService(CourseRepository courseRepository, ModuleRepository moduleRepository, LessonRepository lessonRepository, UserCourseService userCourseService) {
         this.courseRepository = courseRepository;
         this.moduleRepository = moduleRepository;
         this.lessonRepository = lessonRepository;
+        this.userCourseService = userCourseService;
     }
 
     @Transactional
@@ -42,6 +45,9 @@ public class CourseService {
         CourseModel course = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(COURSE_NOT_FOUND));
 
+        if(!course.getUsers().isEmpty()){
+            userCourseService.deleteCourseFromUser(id);
+        }
         List<ModuleModel> modules = moduleRepository.findAllModulesIntoCourse(course);
         modules.forEach(module -> {
             List<LessonModel> lessonList = lessonRepository.findAllLessonsIntoModule(module);

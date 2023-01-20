@@ -80,4 +80,8 @@ public class UserCourseService {
             courseRepository.save(course);
         });
     }
+
+    public void deleteCourseFromUser(String courseId) {
+       userCourseClient.deleteCourseFromUser(courseId);
+    }
 }
