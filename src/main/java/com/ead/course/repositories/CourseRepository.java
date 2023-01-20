@@ -11,12 +11,13 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends MongoRepository<CourseModel, String> ,
         QuerydslPredicateExecutor<CourseModel>,
-        QuerydslBinderCustomizer<QCourseModel> {
+        QuerydslBinderCustomizer<QCourseModel>{
 
 
     Optional<CourseModel> findById(String id);
@@ -37,7 +38,15 @@ public interface CourseRepository extends MongoRepository<CourseModel, String> ,
         });
     }
 
+    default List<CourseModel> findAllCoursesByUser(String userId) {
+        QCourseModel course = QCourseModel.courseModel;
+        BooleanBuilder predicate = new BooleanBuilder();
+        predicate.and(course.users.contains(userId));
+        return (List<CourseModel>) findAll(predicate);
+    }
+
 }
+
 
 
 

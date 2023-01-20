@@ -18,7 +18,6 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Document(collection = "courses")
@@ -43,8 +42,7 @@ public class CourseModel {
     private CourseStatus courseStatus;
     @NotNull
     private CourseLevel courseLevel;
-    @NotNull
-    private UUID userInstuctor;
+    private String userInstuctor;
 
     @ReadOnlyProperty
     @DocumentReference(collection = "modules", lookup = "{ 'course': ?#{#self._id} }", lazy = true)

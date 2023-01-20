@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.util.UUID;
-
 @Data
 public class CourseDto {
 
@@ -19,7 +17,7 @@ public class CourseDto {
     @NotNull
     private CourseStatus courseStatus;
     @NotNull
-    private UUID userInstructor;
+    private String userInstructor;
     @NotNull
     private CourseLevel courseLevel;
 }

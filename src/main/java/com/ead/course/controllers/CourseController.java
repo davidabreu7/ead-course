@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("${api.controller.path}"+"/courses")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CourseController {
 

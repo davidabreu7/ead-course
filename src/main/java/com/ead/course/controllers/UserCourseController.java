@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/courses")
+@RequestMapping("${api.controller.path}"+"/courses")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @Log4j2
 public class UserCourseController {
@@ -31,5 +31,10 @@ public class UserCourseController {
                                                   @RequestBody @Valid SubscriptionDto subscriptionDto) {
 
         return ResponseEntity.ok(userCourseService.subscribeUserInCourse(courseId, subscriptionDto));
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public void deleteUserFromCourse(@PathVariable(name="userId") String userId) {
+        userCourseService.deleteUserFromCourse(userId);
     }
 }

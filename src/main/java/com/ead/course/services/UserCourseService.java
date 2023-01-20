@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserCourseService {
 
@@ -65,5 +67,17 @@ public class UserCourseService {
         subscriptionDto.setUserName(user.username());
         subscriptionDto.setMessage("User subscribed");
         return subscriptionDto;
+    }
+
+    @Transactional
+    public void deleteUserFromCourse(String userId) {
+        List<CourseModel> courses = courseRepository.findAllCoursesByUser(userId);
+        if (courses.isEmpty()) {
+            throw new ResourceNotFoundException(USER_NOT_FOUND);
+        }
+        courses.forEach(course -> {
+            course.getUsers().remove(userId);
+            courseRepository.save(course);
+        });
     }
 }

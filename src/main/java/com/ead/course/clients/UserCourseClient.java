@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
-@FeignClient("authuser")
+@FeignClient("authuser-service")
 public interface UserCourseClient {
 
-    @GetMapping("/users")
+    @GetMapping("/authuser-service/users")
     Optional<Page<UserRecord>> getAllCoursesByStudent(@RequestParam(name = "courses") String id);
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/authuser-service/users/{userId}")
     Optional<UserRecord> getUserById(@PathVariable String userId);
 
-    @PostMapping("/users/{userId}/subscription")
+    @PostMapping("/authuser-service/users/{userId}/subscription")
     Optional<UserRecord> subscribeUserInCourse(@PathVariable String userId, @RequestParam String courseId);
 }
