@@ -23,8 +23,7 @@ spring:
       autoconfiguration:
         jackson:
           enabled: true
-  rabbitmq:
-    addresses: amqps://pggiqwhw:5MZoZuBNM6aNWo7YIZ0ptpaQkz_cVmm8@jackal.rmq.cloudamqp.com/pggiqwhw
+
 eureka:
   client:
     serviceUrl:
