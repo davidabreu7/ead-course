@@ -1,13 +1,14 @@
 package com.ead.course.services;
 
-import com.ead.course.clients.UserCourseClient;
 import com.ead.course.dto.SubscriptionDto;
-import com.ead.course.dto.UserRecord;
 import com.ead.course.exceptions.ResourceNotFoundException;
 import com.ead.course.exceptions.SubscriptionException;
 import com.ead.course.models.CourseModel;
+import com.ead.course.models.UserModel;
 import com.ead.course.repositories.CourseRepository;
+import com.ead.course.repositories.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,28 +17,15 @@ import java.util.List;
 @Service
 public class UserCourseService {
 
-    private final UserCourseClient userCourseClient;
     final CourseRepository courseRepository;
+
+    final UserRepository userRepository;
 
     private static final String USER_NOT_FOUND = "User not found";
 
-    public UserCourseService(UserCourseClient userCourseClient, CourseRepository courseRepository) {
-        this.userCourseClient = userCourseClient;
+    public UserCourseService(CourseRepository courseRepository, UserRepository userRepository) {
         this.courseRepository = courseRepository;
-    }
-
-    public Page<UserRecord> getAllCoursesByStudent(String id) {
-        return userCourseClient.getAllCoursesByStudent(id).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-    }
-
-    public UserRecord getUserById(String id) {
-        return userCourseClient.getUserById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
-    }
-
-    public UserRecord subscribeCourseInUser(String userId, String courseId) {
-        return userCourseClient.subscribeUserInCourse(userId, courseId)
-                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -47,24 +35,25 @@ public class UserCourseService {
         if (course.getUsers().contains(subscriptionDto.getUserId())) {
             throw new SubscriptionException("User already subscribed in this course");
         }
-
-        UserRecord user = getUserById(subscriptionDto.getUserId());
-        if (user.userStatus().equals("BLOCKED")) {
-            throw new SubscriptionException("User is inactive");
+        var user = userRepository.findById(subscriptionDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
+        if(user.getUserStatus().equals("BLOCKED")){
+            throw new SubscriptionException("User is blocked");
         }
 
-        UserRecord userSub = subscribeCourseInUser(user.id(), course.getId());
-        course.getUsers().add(user.id());
+        course.getUsers().add(subscriptionDto.getUserId());
         courseRepository.save(course);
+        user.getCourses().add(courseId);
+        userRepository.save(user);
 
-        return buildSubscription(subscriptionDto, course, userSub);
+        return buildSubscription(subscriptionDto, course, user);
     }
 
-    private static SubscriptionDto buildSubscription(SubscriptionDto subscriptionDto, CourseModel course, UserRecord user) {
+    private static SubscriptionDto buildSubscription(SubscriptionDto subscriptionDto, CourseModel course, UserModel user) {
         subscriptionDto.setCourseId(course.getId());
         subscriptionDto.setCourseName(course.getName());
-        subscriptionDto.setUserId(user.id());
-        subscriptionDto.setUserName(user.username());
+        subscriptionDto.setUserId(user.getId());
+        subscriptionDto.setUserName(user.getUsername());
         subscriptionDto.setMessage("User subscribed");
         return subscriptionDto;
     }
@@ -81,7 +70,9 @@ public class UserCourseService {
         });
     }
 
-    public void deleteCourseFromUser(String courseId) {
-       userCourseClient.deleteCourseFromUser(courseId);
+
+    public Page<UserModel> getAllUsersByCourse(String courseId, Pageable pageable) {
+        return userRepository.findAllUsersByCourse(courseId, pageable);
     }
 }
+

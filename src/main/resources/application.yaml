@@ -5,6 +5,12 @@ server:
 api:
   controller:
     path: /course-service
+  broker:
+    exchange:
+      userEvent: ead.userevent
+    queue:
+      userEventQueue: ead.userevent.ms.course
+
 
 #mongodb
 spring:
@@ -17,9 +23,8 @@ spring:
       autoconfiguration:
         jackson:
           enabled: true
-    discovery:
-        enabled: true
-
+  rabbitmq:
+    addresses: amqps://pggiqwhw:5MZoZuBNM6aNWo7YIZ0ptpaQkz_cVmm8@jackal.rmq.cloudamqp.com/pggiqwhw
 eureka:
   client:
     serviceUrl:

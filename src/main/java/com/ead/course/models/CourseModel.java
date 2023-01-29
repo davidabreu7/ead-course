@@ -50,6 +50,7 @@ public class CourseModel {
     private List<ModuleModel> modules = new ArrayList<>();
 
     @JsonIgnore
+//    @DocumentReference(collection = "users", lookup = "{ 'courses': ?#{#self._id} }", lazy = true)
     private List<String> users = new ArrayList<>();
 
     public CourseModel(CourseDto courseDto) {

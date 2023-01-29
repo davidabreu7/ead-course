@@ -1,11 +1,12 @@
 package com.ead.course.controllers;
 
 import com.ead.course.dto.SubscriptionDto;
-import com.ead.course.dto.UserRecord;
+import com.ead.course.models.UserModel;
 import com.ead.course.services.UserCourseService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,11 +22,6 @@ public class UserCourseController {
         this.userCourseService = userCourseService;
     }
 
-    @GetMapping("/{id}/users")
-    public ResponseEntity<Page<UserRecord>> getAllCoursesByStudent(@PathVariable String id) {
-        return ResponseEntity.ok(userCourseService.getAllCoursesByStudent(id));
-    }
-
     @PostMapping("/{courseId}/users/subscription")
     public ResponseEntity<SubscriptionDto> subscribeUserInCourse(@PathVariable String courseId,
                                                   @RequestBody @Valid SubscriptionDto subscriptionDto) {
@@ -37,4 +33,10 @@ public class UserCourseController {
     public void deleteUserFromCourse(@PathVariable(name="userId") String userId) {
         userCourseService.deleteUserFromCourse(userId);
     }
+
+    @GetMapping("/{courseId}/users")
+    public ResponseEntity<Page<UserModel>> getAllUsersByCourse(@PathVariable String courseId, Pageable pageable) {
+        return ResponseEntity.ok(userCourseService.getAllUsersByCourse(courseId, pageable));
+    }
+
 }

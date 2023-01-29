@@ -7,4 +7,4 @@ spring:
       authentication-database: admin
       username: ${DB_USER}
       password: ${DB_PASS}
-      database: users
+      database: courses-async

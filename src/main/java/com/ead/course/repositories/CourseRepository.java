@@ -17,7 +17,8 @@ import java.util.Optional;
 @Repository
 public interface CourseRepository extends MongoRepository<CourseModel, String> ,
         QuerydslPredicateExecutor<CourseModel>,
-        QuerydslBinderCustomizer<QCourseModel>{
+        QuerydslBinderCustomizer<QCourseModel>
+        {
 
 
     Optional<CourseModel> findById(String id);
@@ -36,6 +37,8 @@ public interface CourseRepository extends MongoRepository<CourseModel, String> ,
             value.forEach(user -> builder.or(root.users.contains(user)));
             return builder;
         });
+
+
     }
 
     default List<CourseModel> findAllCoursesByUser(String userId) {
