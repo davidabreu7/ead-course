@@ -8,3 +8,5 @@ spring:
       username: ${DB_USER}
       password: ${DB_PASS}
       database: courses-async
+  rabbitmq:
+    addresses: ${RABBITMQ_URL}
