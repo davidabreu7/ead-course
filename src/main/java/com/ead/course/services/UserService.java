@@ -12,8 +12,11 @@ public class UserService {
     final
     UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final UserCourseService userCourseService;
+
+    public UserService(UserRepository userRepository, UserCourseService userCourseService) {
         this.userRepository = userRepository;
+        this.userCourseService = userCourseService;
     }
 
     public void createUser(UserModel userModel) {
@@ -28,6 +31,7 @@ public class UserService {
 
     public void deleteUser(UserModel userModel) {
         log.info("(MESSAGE deleteUser) User deleted: {}", userModel.toString());
+        userCourseService.deleteUserFromCourse(userModel.getId());
         userRepository.delete(userModel);
     }
 }
